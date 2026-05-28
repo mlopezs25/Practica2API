@@ -10,7 +10,7 @@ const Characters = () => {
 
   useEffect(() => {
   axios
-    .get(`https://dragonball-api.com/api/characters?page=${page}&search=${busqueda}`)
+    .get(`https://dragonball-api.com/api/characters?page=${page}&name=${busqueda}`)
     .then((res) => {
       setCharacters(res.data.items || []);
       setLinks(res.data.links || {});
@@ -20,7 +20,7 @@ const Characters = () => {
 
 
   const handleSubmit = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setPage(1); 
   };
 
@@ -28,12 +28,13 @@ const Characters = () => {
     <div>
       <h1>Personajes</h1>
 
+      {/* BUSCADOR */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Buscar por nombre..."
           value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
+          onChange={(e) => setBusqueda(e.target.value.toLowerCase())}
         />
         <input type="submit" value="Buscar" />
       </form>
@@ -41,6 +42,7 @@ const Characters = () => {
       {characters.map((char) => (
         <CharacterItem
           key={char.id}
+          id={char.id}
           name={char.name}
           image={char.image}
           race={char.race}
@@ -49,17 +51,16 @@ const Characters = () => {
 
       <div style={{ marginTop: "20px" }}>
         {links?.previous && (
-  <button onClick={() => setPage(page - 1)}>
-    Página anterior
-  </button>
-)}
+          <button onClick={() => setPage(page - 1)}>
+            Página anterior
+          </button>
+        )}
 
-{links?.next && (
-  <button onClick={() => setPage(page + 1)} style={{ marginLeft: "10px" }}>
-    Página siguiente
-  </button>
-)}
-
+        {links?.next && (
+          <button onClick={() => setPage(page + 1)} style={{ marginLeft: "10px" }}>
+            Página siguiente
+          </button>
+        )}
       </div>
     </div>
   );
